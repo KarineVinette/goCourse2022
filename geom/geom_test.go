@@ -3,82 +3,52 @@ package geom
 import "testing"
 
 func TestPerimeter(t *testing.T) {
-	t.Run("perimeter 4 and 6", func(t *testing.T) {
-		got := Perimeter(Rectangle{4, 6})
-		if got != 20 {
-			t.Error("perimeter 4 and 6 is not 20")
-		}
-	})
-	t.Run("perimeter 7 and 9", func(t *testing.T) {
-		got := Perimeter(Rectangle{7, 9})
-		if got != 32 {
-			t.Error("perimeter 7 and 9 is not 32")
-		}
-	})
-}
-func TestCircle_Perimeter(t *testing.T) {
-	t.Run("Area 2.5 and 5.1", func(t *testing.T) {
-		c := Circle{
-			2.5,
-		}
-		got := c.Perimeter()
-		if got != 15.707963267948966 {
-			t.Error("not the good result, got :", got)
-		}
-	})
-	t.Run("Area 2.5 and 5.1", func(t *testing.T) {
-		c := Circle{
-			5.1,
-		}
-		got := c.Perimeter()
-		if got != 32.044245066615886 {
-			t.Error("not the good result, got :", got)
+	cases := []struct {
+		name  string
+		shape Shape
+		want  float64
+	}{
+		{"Perimeter 5 ", Pentagone{5, 3}, 25},
+		{"Perimeter 2.5 ", Circle{2.5}, 15.707963267948966},
+		{"Perimeter 4 and 6", Rectangle{4, 6}, 20},
+		{"Perimeter 7 and 9", Rectangle{7, 9}, 32},
+		{"Perimeter 4", Hexagone{4}, 24},
+		{"Perimeter 12", Hexagone{12}, 72},
+		{"Perimeter 3, 4 and 6", Triangle{3, 4, 6, 0, 0}, 13},
+	}
 
-		}
-
-	})
-}
-func TestRectangle_Perimeter(t *testing.T) {
-	t.Run("perimeter 4 and 6", func(t *testing.T) {
-		r := Rectangle{
-			4, 6,
-		}
-		got := r.Perimeter()
-		if got != 20 {
-			t.Error("perimeter 4 and 6 is not 20")
-		}
-	})
-	t.Run("perimeter 7 and 9", func(t *testing.T) {
-		r := Rectangle{
-			7, 9,
-		}
-		got := r.Perimeter()
-		if got != 32 {
-			t.Error("perimeter 7 and 9 is not 32")
-		}
-	})
+	for i := 0; i < len(cases); i++ {
+		c := cases[i]
+		t.Run(c.name, func(t *testing.T) {
+			got := c.shape.Perimeter()
+			if got != c.want {
+				t.Fatalf("got %f, want %f", got, c.want)
+			}
+		})
+	}
 }
 
-func TestPentagone_Perimeter(t *testing.T) {
-	t.Run("perimeter 5 ", func(t *testing.T) {
-		p := Pentagone{
-			5, 3,
-		}
-		got := p.Perimeter()
-		if got != 25 {
-			t.Error("perimeter 5 is not 25")
-		}
-	})
-}
+func TestArea(t *testing.T) {
+	cases := []struct {
+		name  string
+		shape Shape
+		want  float64
+	}{
+		{"Area 5 and 3", Pentagone{5, 3}, 37.5},
+		{"Area 4 and 6", Rectangle{4, 6}, 24},
+		{"Area 7 and 9", Rectangle{7, 9}, 63},
+		{"Area 4", Hexagone{4}, 41.569219381653056},
+		{"Area 12", Hexagone{12}, 374.1229744348775},
+		{"Area 3 and 4", Triangle{0, 0, 0, 3, 4}, 6},
+	}
 
-func TestPentagoneArea(t *testing.T) {
-	t.Run("Area 5 ", func(t *testing.T) {
-		p := Pentagone{
-			5, 3,
-		}
-		got := p.Area()
-		if got != 37.5 {
-			t.Error("Area 5 is not 37.5")
-		}
-	})
+	for i := 0; i < len(cases); i++ {
+		c := cases[i]
+		t.Run(c.name, func(t *testing.T) {
+			got := c.shape.Area()
+			if got != c.want {
+				t.Fatalf("got %f, want %f", got, c.want)
+			}
+		})
+	}
 }
