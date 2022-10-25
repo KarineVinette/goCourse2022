@@ -35,7 +35,7 @@ func TestErrorWriter_Write(t *testing.T) {
 	w := NewErrorWriter(expErr)
 	data := "Hello, World"
 
-	n, err := w.Write([]byte(data))
+	_, err := w.Write([]byte(data))
 	if err != expErr {
 		t.Fatalf("didn't write the expected error: %v, got: %v", expErr, err)
 	}
@@ -60,6 +60,9 @@ func TestSlowWriter_Write(t *testing.T) {
 			t.Fatal("the writer doesn't write at the specified speed")
 		}
 		data = data[:n]
+		if string(w.currentData) == data {
+			break
+		}
 	}
 
 }
@@ -75,7 +78,8 @@ func TestGarbageWriter_Write(t *testing.T) {
 		t.Fatal("the writer should write garbage, but not fail")
 	}
 
-	if data == w.writtenData {
+	t.Log(string(w.writtenData))
+	if data == string(w.writtenData) {
 		t.Fatal("the data written shouldn't be the same as the original one")
 	}
 
